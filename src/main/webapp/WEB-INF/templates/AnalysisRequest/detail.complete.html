@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:include="page :: head(title=${title})"></head>
+	<body>
+		<div th:include="page :: header"></div>
+		
+		<h1>Analysis Request: Complete</h1>
+		
+		<div th:text="${analysisRequest.analysisRequestStateName}"></div>		
+		<div th:text="${analysisRequest.analysisTypeName}"></div>
+		<div th:text="${analysisRequest.instrumentName}"></div>
+		<div th:text="${analysisRequest.username}"></div>
+		<div th:text="${{analysisRequest.requestDate}}"></div>
+
+		<h3 th:text="Results"></h3>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Sample ID</th>
+					<th>Result</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="result : ${results}">
+					<td th:text="${result.igsn}"></td>
+					<td th:switch="${result.resultTypeName}">
+						<a th:case="'URL'" th:href="${result.value}" th:text="${result.value}">http://ddfe.curtin.edu.au/gswa-library/1/IECUR0003</a>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+			</tfoot>
+		</table>
+
+		<div th:include="page :: footer"></div>
+	</body>
+</html>

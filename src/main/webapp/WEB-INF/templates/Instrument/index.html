@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:include="page :: head(title=${title})"></head>
+	<body>
+		<div th:include="page :: header"></div>
+		
+		<h1>Instruments</h1>
+
+		<a th:href="@{/Instrument/Create}">Create</a>
+		<table th:unless="${#lists.isEmpty(instruments)}">
+			<thead>
+				<tr>
+					<th>Manufacturer</th>
+					<th>Instrument</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="instrument : ${instruments}">
+					<td th:text="${instrument.manufacturerName}"></td>
+					<td>
+						<a 	th:href="@{/Instrument/} + ${instrument.id}" 
+							th:text="${instrument.instrumentName}">TIMA</a>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+			</tfoot>
+		</table>
+
+		<div th:include="page :: footer"></div>
+	</body>
+</html>

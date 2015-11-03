@@ -1,0 +1,46 @@
+// dot 2.38.0 on Linux 3.16.0-4-amd64
+// SchemaSpy rev 590
+digraph "view_geosample_and_mineral_count" {
+  graph [
+    rankdir="RL"
+    bgcolor="#f7f7f7"
+    nodesep="0.18"
+    ranksep="0.46"
+    fontname="Helvetica"
+    fontsize="11"
+  ];
+  node [
+    fontname="Helvetica"
+    fontsize="11"
+    shape="plaintext"
+  ];
+  edge [
+    arrowsize="0.8"
+  ];
+  "view_geosample_and_mineral_count" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">view_geosample_and_mineral_count</TD></TR>
+      <TR><TD PORT="location" COLSPAN="3" ALIGN="LEFT">location</TD></TR>
+      <TR><TD PORT="igsn" COLSPAN="3" ALIGN="LEFT">igsn</TD></TR>
+      <TR><TD PORT="igsn_url" COLSPAN="3" ALIGN="LEFT">igsn_url</TD></TR>
+      <TR><TD PORT="name" COLSPAN="3" ALIGN="LEFT">name</TD></TR>
+      <TR><TD PORT="mount_type_name" COLSPAN="3" ALIGN="LEFT">mount_type_name</TD></TR>
+      <TR><TD PORT="sample_custodian" COLSPAN="3" ALIGN="LEFT">sample_custodian</TD></TR>
+      <TR><TD PORT="sample_custodian_url" COLSPAN="3" ALIGN="LEFT">sample_custodian_url</TD></TR>
+      <TR><TD PORT="collection_url" COLSPAN="3" ALIGN="LEFT">collection_url</TD></TR>
+      <TR><TD PORT="instrument_name" COLSPAN="3" ALIGN="LEFT">instrument_name</TD></TR>
+      <TR><TD PORT="software_version" COLSPAN="3" ALIGN="LEFT">software_version</TD></TR>
+      <TR><TD PORT="data_url" COLSPAN="3" ALIGN="LEFT">data_url</TD></TR>
+      <TR><TD PORT="image_url" COLSPAN="3" ALIGN="LEFT">image_url</TD></TR>
+      <TR><TD PORT="image_thumbnail_url" COLSPAN="3" ALIGN="LEFT">image_thumbnail_url</TD></TR>
+      <TR><TD PORT="analysis_date" COLSPAN="3" ALIGN="LEFT">analysis_date</TD></TR>
+      <TR><TD PORT="analysed_by" COLSPAN="3" ALIGN="LEFT">analysed_by</TD></TR>
+      <TR><TD PORT="analysed_by_url" COLSPAN="3" ALIGN="LEFT">analysed_by_url</TD></TR>
+      <TR><TD PORT="mineral_information_json" COLSPAN="3" ALIGN="LEFT">mineral_information_json</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">view</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/view_geosample_and_mineral_count.html"
+    tooltip="view_geosample_and_mineral_count"
+  ];
+}

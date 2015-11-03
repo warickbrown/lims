@@ -1,0 +1,75 @@
+// Here's a one-liner to fix line endings: dos2unix $(file $(find -name '*.java') | grep CRLF | sed 's/^\([^:]\+\).\+/\1/')
+plugins {
+	id "org.ajoberstar.organize-imports" version "1.0.1"
+}
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'checkstyle'
+
+version = '1.0'
+
+// Uses JDK 8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// 1. Get dependencies from Maven local repository
+// 2. Get dependencies from Maven central repository
+repositories {
+//	mavenLocal()
+  mavenCentral()
+  maven {
+  	url 'http://download.osgeo.org/webdav/geotools'
+  	url 'http://www.hibernatespatial.org/repository'
+  }
+}
+
+//Project dependencies
+dependencies {
+	compile 'ch.qos.logback:logback-classic:1.1.2'
+	compile 'org.springframework:spring-webmvc:4.1.5.RELEASE'
+	compile 'org.springframework:spring-jdbc:4.1.5.RELEASE'
+	compile 'org.springframework:spring-context:4.1.5.RELEASE'
+	compile 'org.springframework:spring-orm:4.1.5.RELEASE'
+	compile 'org.springframework.security:spring-security-web:3.2.6.RELEASE'
+	compile 'org.springframework.security:spring-security-config:3.2.6.RELEASE'
+	compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
+	compile 'org.thymeleaf:thymeleaf:2.1.4.RELEASE'
+	compile 'org.thymeleaf:thymeleaf-spring4:2.1.4.RELEASE'
+	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE' // https://github.com/thymeleaf/thymeleaf-extras-springsecurity
+	compile 'org.hibernate:hibernate-core:4.1.10.Final'
+	compile 'org.hibernate:hibernate-spatial:4.0.1'
+	compile 'javax.inject:javax.inject:1'
+	compile 'org.apache.commons:commons-compress:1.9'
+	compile 'jstl:jstl:1.2'
+
+	//include in compile only, exclude in the war
+	providedCompile 'javax.servlet:servlet-api:2.5'
+
+	//testCompile group: 'junit', name: 'junit', version: '4.11'	
+}
+
+def checkstyleConfigDir = new File(buildscript.sourceFile.parentFile, 'config/checkstyle')
+checkstyle {
+	configFile = new File(checkstyleConfigDir, "checkstyle.xml")
+	configProperties.checkstyleConfigDir = checkstyleConfigDir
+}
+
+task fixClasspath(type:Exec) {
+    commandLine 'sh', './fix_classpath.sh'
+}
+
+eclipse {
+    classpath {
+    	downloadJavadoc=true 
+		downloadSources=true
+	}
+}
+
+organizeImports {
+    sourceSets = project.sourceSets
+    sortOrder = [/^(javax?)\./, /^(groovyx?)\./, /^([^\.]+\.[^\.]+)\./]
+    staticImportsFirst = true
+    removeUnused = true
+    includes = ['**/*.java', '**/*.groovy']
+}

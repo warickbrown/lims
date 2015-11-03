@@ -1,0 +1,3 @@
+^/\*\s*$
+^ \* Copyright Curtin University, 2015.*$
+^ \*/$

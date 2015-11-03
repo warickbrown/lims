@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:include="page :: head(title=${title})"></head>
+	<body>
+		<div th:include="page :: header"></div>
+		
+		<h1>Analysis Request: Specified</h1>
+		
+		<div th:text="${analysisRequest.analysisRequestStateName}"></div>		
+		<div th:text="${analysisRequest.analysisTypeName}"></div>
+		<div th:text="${analysisRequest.instrumentName}"></div>
+		<div th:text="${analysisRequest.username}"></div>
+		<div th:text="${{analysisRequest.requestDate}}"></div>
+
+		<h3 th:text="Geosamples"></h3>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Sample ID</th>
+					<th>IGSN</th>
+					<th>Results</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="geosample : ${geosamples}">
+					<td th:text="${geosample.getGeosampleId()}"></td>
+					<td th:text="${geosample.getIgsn()}"></td>
+					<td>
+						<form th:unless="${#sets.contains(geosampleIdsThatHaveResults, geosample.getGeosampleId())}" method="POST" action="#" th:action="@{/Result/Upload}" enctype="multipart/form-data">
+							<input type="hidden" name="analysisRequestId" th:value="${analysisRequest.id}" />
+							<input type="hidden" name="geosampleId" th:value="${geosample.getGeosampleId()}" />
+							<!-- TODO: It would be good to specify what kind of file is allowed based on the Analysis Capability. -->
+							<input type="file" name="file" /><br />
+							<input type="submit" value="Upload"/>
+						</form>
+						<form th:if="${#sets.contains(geosampleIdsThatHaveResults, geosample.getGeosampleId())}" method="POST" action="#" th:action="@{/Result/Remove}">
+							<input type="hidden" name="analysisRequestId" th:value="${analysisRequest.id}" />
+							<input type="hidden" name="geosampleId" th:value="${geosample.getGeosampleId()}" />
+							<input type="submit" value="Remove"/>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+			</tfoot>
+		</table>
+		<form method="POST" action="#" th:action="@{/AnalysisRequest/Complete}">
+			<input type="hidden" name="analysisRequestId" th:value="${analysisRequest.id}" />							
+			<input type="submit" value="Complete"/>
+		</form>
+
+		<div th:include="page :: footer"></div>
+	</body>
+</html>

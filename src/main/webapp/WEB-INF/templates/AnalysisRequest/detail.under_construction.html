@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:include="page :: head(title=${title})"></head>
+	<body>
+		<div th:include="page :: header"></div>
+		
+		<h1>Analysis Request: Under Construction</h1>
+		
+		<div th:text="${analysisRequest.analysisRequestStateName}"></div>		
+		<div th:text="${analysisRequest.analysisTypeName}"></div>
+		<div th:text="${analysisRequest.instrumentName}"></div>
+		<div th:text="${analysisRequest.username}"></div>
+		<div th:text="${{analysisRequest.requestDate}}"></div>
+
+		<h3 th:text="Geosamples"></h3>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>Sample ID</th>
+					<th>IGSN</th>
+					<th>Add to AR</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="geosample : ${geosamples}">
+					<td th:text="${geosample.getGeosampleId()}"></td>
+					<td th:text="${geosample.getIgsn()}"></td>
+					<td>
+						<input 
+							type="checkbox" 
+						    th:attr="data-geosampleId=${geosample.getGeosampleId()}"
+							th:name="${'geosample_' + geosample.getGeosampleId()}"
+							th:checked="${#sets.contains(analysisRequest.geosampleIds, geosample.getGeosampleId())}" />
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+			</tfoot>
+		</table>
+
+		<form action="#" th:action="@{/AnalysisRequest/Specify}" method="POST">
+			<input type="hidden" name="analysisRequestId" th:value="${analysisRequest.id}" />
+			<input type="submit" value="Save" />
+		</form>
+
+		<div th:include="page :: footer"></div>
+		
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+// TODO: SEE http://docs.spring.io/spring-security/site/docs/current/reference/html/csrf.html "Ajax and JSON Requests"
+				$('input[type=checkbox]').change(function(){
+				    data = {
+				    	add: $(this).is(':checked'),
+				    	analysisRequestId: /*[[${analysisRequest.id}]]*/ 'DO NOT REMOVE THE PRECEEDING COMMENT: THYMELEAF WILL INTERPOLATE IT.',
+				    	geosampleId: $(this).attr('data-geosampleId'),
+				    	_csrf: $('input[type=hidden][name="_csrf"]').val()
+				    };
+				    
+				    $.ajax({
+				        type: "POST",
+				        url: "/lims/AnalysisRequest/AddGeosample",
+				        //dataType: "json",
+				        data: data
+				    });
+				});
+			/*]]>*/
+		</script>
+	</body>
+</html>

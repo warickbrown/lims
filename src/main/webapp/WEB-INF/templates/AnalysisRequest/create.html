@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:include="page :: head(title=${title})"></head>
+	<body>
+		<div th:include="page :: header"></div>
+		
+		<h1>Analysis Request: Creation</h1>
+	
+		<form action="#" th:action="@{/AnalysisRequest/Create}" th:object="${analysisRequestForm}" method="POST">
+		    <select th:field="*{analysisCapabilityId}">
+		    	<option 
+		    		th:each="analysisCapability : ${analysisCapabilities}" 
+					th:value="${analysisCapability.getAnalysisCapabilityId()}" 
+					th:text="${analysisCapability.getResultProcessorName()}">TESCAN Import</option>
+		    </select>
+		    <input type="submit" value="Submit" />
+		</form>
+		<div th:include="page :: footer"></div>
+	</body>
+</html>

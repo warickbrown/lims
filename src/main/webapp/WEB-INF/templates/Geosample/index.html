@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:include="page :: head(title=${title})"></head>
+	<body>
+		<div th:include="page :: header"></div>
+		
+		<h1>Geosamples</h1>
+
+		<div>Upload geosample CSV:</div>
+		<div th:if="${error != null}" th:utext="${error}">Error message here.</div>
+		
+		<form method="POST" action="#" th:action="@{/Geosample/Upload}" enctype="multipart/form-data">
+			<input type="file" name="file" />
+		    <input type="submit" value="Upload" />
+		</form>
+		
+		<table th:unless="${#lists.isEmpty(geosamples)}">
+			<thead>
+				<tr>
+					<th>IGSN</th>
+					<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="geosample : ${geosamples}">
+					<td th:text="${geosample.igsn}">IECUR0000</td>
+					<td th:text="${geosample.geosampleName}">Sample Name</td>
+				</tr>
+			</tbody>
+			<tfoot>
+			</tfoot>
+		</table>
+
+		<div th:include="page :: footer"></div>
+	</body>
+</html>

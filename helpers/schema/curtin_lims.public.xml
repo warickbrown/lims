@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="curtin_lims" schema="public" type="PostgreSQL - 9.4.5">
+   <tables>
+      <table name="analysis_capability" remarks="Defines an analysis capability of an instrument and describes how its results should be processed." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('analysis_capability_analysis_capability_id_seq'::regclass)" digits="0" id="0" name="analysis_capability_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="analysis_capability_id" foreignKey="analysis_request_analysis_capability_id_fkey" implied="false" onDeleteCascade="false" table="analysis_request"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="instrument_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="instrument_id" foreignKey="analysis_capability_instrument_id_fkey" implied="false" onDeleteCascade="false" table="instrument"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="analysis_type_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="analysis_type_id" foreignKey="analysis_capability_analysis_type_id_fkey" implied="false" onDeleteCascade="false" table="analysis_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="result_processor_type_id" nullable="true" remarks="" size="10" type="int4">
+            <parent column="result_processor_type_id" foreignKey="analysis_capability_result_processor_type_id_fkey" implied="false" onDeleteCascade="false" table="result_processor_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="result_provision_type_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="result_provision_type_id" foreignKey="analysis_capability_result_provision_type_id_fkey" implied="false" onDeleteCascade="false" table="result_provision_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="5" name="result_type_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="result_type_id" foreignKey="analysis_capability_result_type_id_fkey" implied="false" onDeleteCascade="false" table="result_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="6" name="result_processor_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="version" nullable="false" remarks="" size="16" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="8" name="result_processor_value" nullable="true" remarks="" size="64" type="varchar"/>
+         <primaryKey column="analysis_capability_id" sequenceNumberInPK="1"/>
+         <index name="analysis_capability_pkey" unique="true">
+            <column ascending="true" name="analysis_capability_id"/>
+         </index>
+      </table>
+      <table name="analysis_request" remarks="Describes when an analysis capability was requested and by whom." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('analysis_request_analysis_request_id_seq'::regclass)" digits="0" id="0" name="analysis_request_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="analysis_request_id" foreignKey="analysis_request_geosample_mm_analysis_request_id_fkey" implied="false" onDeleteCascade="false" table="analysis_request_geosample_mm"/>
+            <child column="analysis_request_id" foreignKey="result_analysis_request_id_fkey" implied="false" onDeleteCascade="false" table="result"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="analysis_request_state_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="analysis_request_state_id" foreignKey="analysis_request_analysis_request_state_id_fkey" implied="false" onDeleteCascade="false" table="analysis_request_state"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="analysis_capability_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="analysis_capability_id" foreignKey="analysis_request_analysis_capability_id_fkey" implied="false" onDeleteCascade="false" table="analysis_capability"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="person_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="person_id" foreignKey="analysis_request_person_id_fkey" implied="false" onDeleteCascade="false" table="person"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="4" name="request_date" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="analysis_request_id" sequenceNumberInPK="1"/>
+         <index name="analysis_request_pkey" unique="true">
+            <column ascending="true" name="analysis_request_id"/>
+         </index>
+      </table>
+      <table name="analysis_request_geosample_mm" remarks="Links geosamples to be included in an analysis request." schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="analysis_request_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="analysis_request_id" foreignKey="analysis_request_geosample_mm_analysis_request_id_fkey" implied="false" onDeleteCascade="false" table="analysis_request"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="geosample_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="geosample_id" foreignKey="analysis_request_geosample_mm_geosample_id_fkey" implied="false" onDeleteCascade="false" table="geosample"/>
+         </column>
+         <index name="ix_analysis_request_geosample_mm_analysis_request_id_geosample_" unique="true">
+            <column ascending="true" name="analysis_request_id"/>
+            <column ascending="true" name="geosample_id"/>
+         </index>
+      </table>
+      <table name="analysis_request_state" remarks="Describes what state an analysis is currently in." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('analysis_request_state_analysis_request_state_id_seq'::regclass)" digits="0" id="0" name="analysis_request_state_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="analysis_request_state_id" foreignKey="analysis_request_analysis_request_state_id_fkey" implied="false" onDeleteCascade="false" table="analysis_request"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="analysis_request_state_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <primaryKey column="analysis_request_state_id" sequenceNumberInPK="1"/>
+         <index name="analysis_request_state_pkey" unique="true">
+            <column ascending="true" name="analysis_request_state_id"/>
+         </index>
+         <index name="ix_analysis_request_state_analysis_request_state_name_unique" unique="true">
+            <column ascending="true" name="analysis_request_state_name"/>
+         </index>
+      </table>
+      <table name="analysis_type" remarks="Broad type of analysis, e.g. Mineral classification." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('analysis_type_analysis_type_id_seq'::regclass)" digits="0" id="0" name="analysis_type_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="analysis_type_id" foreignKey="analysis_capability_analysis_type_id_fkey" implied="false" onDeleteCascade="false" table="analysis_capability"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="analysis_type_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <primaryKey column="analysis_type_id" sequenceNumberInPK="1"/>
+         <index name="analysis_type_pkey" unique="true">
+            <column ascending="true" name="analysis_type_id"/>
+         </index>
+         <index name="ix_analysis_type_analysis_type_name_unique" unique="true">
+            <column ascending="true" name="analysis_type_name"/>
+         </index>
+      </table>
+      <table name="authority" remarks="e.g. ROLE_USER, ROLE_ADMIN." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('authority_authority_id_seq'::regclass)" digits="0" id="0" name="authority_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="authority_id" foreignKey="faction_authority_mm_authority_id_fkey" implied="false" onDeleteCascade="false" table="faction_authority_mm"/>
+            <child column="authority_id" foreignKey="person_authority_mm_authority_id_fkey" implied="false" onDeleteCascade="false" table="person_authority_mm"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="authority_name" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="authority_id" sequenceNumberInPK="1"/>
+         <index name="authority_pkey" unique="true">
+            <column ascending="true" name="authority_id"/>
+         </index>
+         <index name="ix_authority_authority_name_unique" unique="true">
+            <column ascending="true" name="authority_name"/>
+         </index>
+      </table>
+      <table name="faction" remarks="e.g. FACTION_EMPLOYEE, FACTION_SENIOR_EMPLOYEE." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('faction_faction_id_seq'::regclass)" digits="0" id="0" name="faction_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="faction_id" foreignKey="faction_authority_mm_faction_id_fkey" implied="false" onDeleteCascade="false" table="faction_authority_mm"/>
+            <child column="faction_id" foreignKey="faction_person_mm_faction_id_fkey" implied="false" onDeleteCascade="false" table="faction_person_mm"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="faction_name" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="faction_id" sequenceNumberInPK="1"/>
+         <index name="faction_pkey" unique="true">
+            <column ascending="true" name="faction_id"/>
+         </index>
+         <index name="ix_faction_faction_name_unique" unique="true">
+            <column ascending="true" name="faction_name"/>
+         </index>
+      </table>
+      <table name="faction_authority_mm" remarks="Defines what factions people belong to." schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="faction_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="faction_id" foreignKey="faction_authority_mm_faction_id_fkey" implied="false" onDeleteCascade="false" table="faction"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="authority_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="authority_id" foreignKey="faction_authority_mm_authority_id_fkey" implied="false" onDeleteCascade="false" table="authority"/>
+         </column>
+         <index name="ix_faction_authority_mm_faction_id_and_authority_id_unique" unique="true">
+            <column ascending="true" name="faction_id"/>
+            <column ascending="true" name="authority_id"/>
+         </index>
+      </table>
+      <table name="faction_person_mm" remarks="Groups people into factions." schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="faction_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="faction_id" foreignKey="faction_person_mm_faction_id_fkey" implied="false" onDeleteCascade="false" table="faction"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="person_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="person_id" foreignKey="faction_person_mm_person_id_fkey" implied="false" onDeleteCascade="false" table="person"/>
+         </column>
+         <index name="ix_faction_person_mm_faction_id_and_person_id_unique" unique="true">
+            <column ascending="true" name="faction_id"/>
+            <column ascending="true" name="person_id"/>
+         </index>
+      </table>
+      <table name="geosample" remarks="Describes an individual geological sample, including its location and metadata." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('geosample_geosample_id_seq'::regclass)" digits="0" id="0" name="geosample_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="geosample_id" foreignKey="analysis_request_geosample_mm_geosample_id_fkey" implied="false" onDeleteCascade="false" table="analysis_request_geosample_mm"/>
+            <child column="geosample_id" foreignKey="mindif_geosample_id_fkey" implied="false" onDeleteCascade="false" table="mindif"/>
+            <child column="geosample_id" foreignKey="result_geosample_id_fkey" implied="false" onDeleteCascade="false" table="result"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="mount_type_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="mount_type_id" foreignKey="geosample_mount_type_id_fkey" implied="false" onDeleteCascade="false" table="mount_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="igsn" nullable="true" remarks="" size="9" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="geosample_name" nullable="true" remarks="" size="32" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="location" nullable="false" remarks="" size="2147483647" type="geometry"/>
+         <column autoUpdated="false" digits="0" id="5" name="rock_type" nullable="true" remarks="" size="32" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="site_code" nullable="true" remarks="" size="32" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="tectonic_unit" nullable="true" remarks="" size="128" type="varchar"/>
+         <primaryKey column="geosample_id" sequenceNumberInPK="1"/>
+         <index name="geosample_pkey" unique="true">
+            <column ascending="true" name="geosample_id"/>
+         </index>
+         <index name="ix_geosample_igsn_unique" unique="true">
+            <column ascending="true" name="igsn"/>
+         </index>
+      </table>
+      <table name="gt_pk_metadata_table" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="table_schema" nullable="false" remarks="" size="32" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="table_name" nullable="false" remarks="" size="32" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="pk_column" nullable="false" remarks="" size="32" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="pk_column_idx" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="pk_policy" nullable="true" remarks="" size="32" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="pk_sequence" nullable="true" remarks="" size="64" type="varchar"/>
+         <index name="gt_pk_metadata_table_table_schema_table_name_pk_column_key" unique="true">
+            <column ascending="true" name="table_schema"/>
+            <column ascending="true" name="table_name"/>
+            <column ascending="true" name="pk_column"/>
+         </index>
+      </table>
+      <table name="instrument" remarks="Instrument names linked to a specific manufacturer." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('instrument_instrument_id_seq'::regclass)" digits="0" id="0" name="instrument_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="instrument_id" foreignKey="analysis_capability_instrument_id_fkey" implied="false" onDeleteCascade="false" table="analysis_capability"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="manufacturer_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="manufacturer_id" foreignKey="instrument_manufacturer_id_fkey" implied="false" onDeleteCascade="false" table="manufacturer"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="instrument_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <primaryKey column="instrument_id" sequenceNumberInPK="1"/>
+         <index name="instrument_pkey" unique="true">
+            <column ascending="true" name="instrument_id"/>
+         </index>
+         <index name="ix_instrument_manufacturer_id_instrument_name_unique" unique="true">
+            <column ascending="true" name="manufacturer_id"/>
+            <column ascending="true" name="instrument_name"/>
+         </index>
+      </table>
+      <table name="manufacturer" remarks="Manufacturers of instruments." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('manufacturer_manufacturer_id_seq'::regclass)" digits="0" id="0" name="manufacturer_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="manufacturer_id" foreignKey="instrument_manufacturer_id_fkey" implied="false" onDeleteCascade="false" table="instrument"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="manufacturer_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <primaryKey column="manufacturer_id" sequenceNumberInPK="1"/>
+         <index name="manufacturer_pkey" unique="true">
+            <column ascending="true" name="manufacturer_id"/>
+         </index>
+         <index name="ix_manufacturer_manufacturer_name_unique" unique="true">
+            <column ascending="true" name="manufacturer_name"/>
+         </index>
+      </table>
+      <table name="mindif" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('mindif_mindif_id_seq'::regclass)" digits="0" id="0" name="mindif_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="mindif_id" foreignKey="mindif_field_mindif_id_fkey" implied="false" onDeleteCascade="false" table="mindif_field"/>
+            <child column="mindif_id" foreignKey="mineral_mass_and_colour_mindif_id_fkey" implied="false" onDeleteCascade="false" table="mineral_mass_and_colour"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="geosample_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="geosample_id" foreignKey="mindif_geosample_id_fkey" implied="false" onDeleteCascade="false" table="geosample"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="measurement_guid" nullable="false" remarks="" size="32" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="software_version" nullable="false" remarks="" size="16" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="view_field_um" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="image_width_px" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="6" name="image_height_px" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="sample_diameter_um" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="6" id="8" name="collection_date" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="mindif_id" sequenceNumberInPK="1"/>
+         <index name="mindif_pkey" unique="true">
+            <column ascending="true" name="mindif_id"/>
+         </index>
+         <index name="ix_mindif_measurement_guid_unique" unique="true">
+            <column ascending="true" name="measurement_guid"/>
+         </index>
+      </table>
+      <table name="mindif_field" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('mindif_field_mindif_field_id_seq'::regclass)" digits="0" id="0" name="mindif_field_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="mindif_field_id" foreignKey="mineral_occurrence_mindif_field_id_fkey" implied="false" onDeleteCascade="false" table="mineral_occurrence"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="mindif_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="mindif_id" foreignKey="mindif_field_mindif_id_fkey" implied="false" onDeleteCascade="false" table="mindif"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="mindif_field_name" nullable="false" remarks="" size="4" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="position_x_px" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="position_y_px" nullable="false" remarks="" size="10" type="int4"/>
+         <primaryKey column="mindif_field_id" sequenceNumberInPK="1"/>
+         <index name="mindif_field_pkey" unique="true">
+            <column ascending="true" name="mindif_field_id"/>
+         </index>
+         <index name="ix_mindif_field_mindif_id_and_mindif_field_name_unique" unique="true">
+            <column ascending="true" name="mindif_id"/>
+            <column ascending="true" name="mindif_field_name"/>
+         </index>
+      </table>
+      <table name="mineral" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('mineral_mineral_id_seq'::regclass)" digits="0" id="0" name="mineral_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="mineral_id" foreignKey="mineral_mass_and_colour_mineral_id_fkey" implied="false" onDeleteCascade="false" table="mineral_mass_and_colour"/>
+            <child column="mineral_id" foreignKey="mineral_occurrence_mineral_id_fkey" implied="false" onDeleteCascade="false" table="mineral_occurrence"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="mineral_name" nullable="false" remarks="" size="32" type="varchar"/>
+         <primaryKey column="mineral_id" sequenceNumberInPK="1"/>
+         <index name="mineral_pkey" unique="true">
+            <column ascending="true" name="mineral_id"/>
+         </index>
+         <index name="ix_mineral_mineral_name_unique" unique="true">
+            <column ascending="true" name="mineral_name"/>
+         </index>
+      </table>
+      <table name="mineral_mass_and_colour" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('mineral_mass_and_colour_mineral_mass_and_colour_id_seq'::regclass)" digits="0" id="0" name="mineral_mass_and_colour_id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="mindif_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="mindif_id" foreignKey="mineral_mass_and_colour_mindif_id_fkey" implied="false" onDeleteCascade="false" table="mindif"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="mineral_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="mineral_id" foreignKey="mineral_mass_and_colour_mineral_id_fkey" implied="false" onDeleteCascade="false" table="mineral"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="colour" nullable="false" remarks="" size="24" type="bit"/>
+         <column autoUpdated="false" digits="17" id="4" name="mass" nullable="false" remarks="" size="17" type="float8"/>
+         <primaryKey column="mineral_mass_and_colour_id" sequenceNumberInPK="1"/>
+         <index name="mineral_mass_and_colour_pkey" unique="true">
+            <column ascending="true" name="mineral_mass_and_colour_id"/>
+         </index>
+         <index name="ix_mineral_mass_mindif_id_unique_and_colour_mineral_id" unique="true">
+            <column ascending="true" name="mindif_id"/>
+            <column ascending="true" name="mineral_id"/>
+         </index>
+      </table>
+      <table name="mineral_occurrence" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('mineral_occurrence_mineral_occurrence_id_seq'::regclass)" digits="0" id="0" name="mineral_occurrence_id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="mindif_field_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="mindif_field_id" foreignKey="mineral_occurrence_mindif_field_id_fkey" implied="false" onDeleteCascade="false" table="mindif_field"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="mineral_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="mineral_id" foreignKey="mineral_occurrence_mineral_id_fkey" implied="false" onDeleteCascade="false" table="mineral"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="mineral_pixel_count" nullable="false" remarks="" size="10" type="int4"/>
+         <primaryKey column="mineral_occurrence_id" sequenceNumberInPK="1"/>
+         <index name="mineral_occurrence_pkey" unique="true">
+            <column ascending="true" name="mineral_occurrence_id"/>
+         </index>
+         <index name="ix_mineral_occurrence_mindif_field_id_and_mineral_id_unique" unique="true">
+            <column ascending="true" name="mindif_field_id"/>
+            <column ascending="true" name="mineral_id"/>
+         </index>
+      </table>
+      <table name="mount_type" remarks="Way in which the sample was mounted, e.g. None, Epoxy Resin 25mm Round." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('mount_type_mount_type_id_seq'::regclass)" digits="0" id="0" name="mount_type_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="mount_type_id" foreignKey="geosample_mount_type_id_fkey" implied="false" onDeleteCascade="false" table="geosample"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="mount_type_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <primaryKey column="mount_type_id" sequenceNumberInPK="1"/>
+         <index name="mount_type_pkey" unique="true">
+            <column ascending="true" name="mount_type_id"/>
+         </index>
+         <index name="ix_mount_type_mount_type_name_unique" unique="true">
+            <column ascending="true" name="mount_type_name"/>
+         </index>
+      </table>
+      <table name="person" remarks="Users and credentials." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('person_person_id_seq'::regclass)" digits="0" id="0" name="person_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="person_id" foreignKey="analysis_request_person_id_fkey" implied="false" onDeleteCascade="false" table="analysis_request"/>
+            <child column="person_id" foreignKey="faction_person_mm_person_id_fkey" implied="false" onDeleteCascade="false" table="faction_person_mm"/>
+            <child column="person_id" foreignKey="person_authority_mm_person_id_fkey" implied="false" onDeleteCascade="false" table="person_authority_mm"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="username" nullable="false" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="password" nullable="false" remarks="" size="60" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="enabled" nullable="false" remarks="" size="1" type="bool"/>
+         <primaryKey column="person_id" sequenceNumberInPK="1"/>
+         <index name="person_pkey" unique="true">
+            <column ascending="true" name="person_id"/>
+         </index>
+         <index name="ix_person_username_unique" unique="true">
+            <column ascending="true" name="username"/>
+         </index>
+      </table>
+      <table name="person_authority_mm" remarks="Defines what authorities people have." schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="person_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="person_id" foreignKey="person_authority_mm_person_id_fkey" implied="false" onDeleteCascade="false" table="person"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="authority_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="authority_id" foreignKey="person_authority_mm_authority_id_fkey" implied="false" onDeleteCascade="false" table="authority"/>
+         </column>
+         <index name="ix_person_authority_mm_person_id_and_authority_id_unique" unique="true">
+            <column ascending="true" name="person_id"/>
+            <column ascending="true" name="authority_id"/>
+         </index>
+      </table>
+      <table name="result" remarks="Associates a result value with an analysis request and a geosample." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('result_result_id_seq'::regclass)" digits="0" id="0" name="result_id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="analysis_request_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="analysis_request_id" foreignKey="result_analysis_request_id_fkey" implied="false" onDeleteCascade="false" table="analysis_request"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="geosample_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="geosample_id" foreignKey="result_geosample_id_fkey" implied="false" onDeleteCascade="false" table="geosample"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="value" nullable="true" remarks="" size="1024" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="has_staged_file" nullable="false" remarks="" size="1" type="bool"/>
+         <primaryKey column="result_id" sequenceNumberInPK="1"/>
+         <index name="result_pkey" unique="true">
+            <column ascending="true" name="result_id"/>
+         </index>
+         <index name="ix_result_analysis_request_id_geosample_id_unique" unique="true">
+            <column ascending="true" name="analysis_request_id"/>
+            <column ascending="true" name="geosample_id"/>
+         </index>
+      </table>
+      <table name="result_processor_type" remarks="Ways in which results can be processed, e.g. External, Class." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('result_processor_type_result_processor_type_id_seq'::regclass)" digits="0" id="0" name="result_processor_type_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="result_processor_type_id" foreignKey="analysis_capability_result_processor_type_id_fkey" implied="false" onDeleteCascade="false" table="analysis_capability"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="result_processor_type_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <primaryKey column="result_processor_type_id" sequenceNumberInPK="1"/>
+         <index name="result_processor_type_pkey" unique="true">
+            <column ascending="true" name="result_processor_type_id"/>
+         </index>
+         <index name="ix_result_processor_type_result_processor_type_name_unique" unique="true">
+            <column ascending="true" name="result_processor_type_name"/>
+         </index>
+      </table>
+      <table name="result_provision_type" remarks="Ways in which results can be povided, e.g. File Upload, User Entry." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('result_provision_type_result_provision_type_id_seq'::regclass)" digits="0" id="0" name="result_provision_type_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="result_provision_type_id" foreignKey="analysis_capability_result_provision_type_id_fkey" implied="false" onDeleteCascade="false" table="analysis_capability"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="result_provision_type_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <primaryKey column="result_provision_type_id" sequenceNumberInPK="1"/>
+         <index name="result_provision_type_pkey" unique="true">
+            <column ascending="true" name="result_provision_type_id"/>
+         </index>
+         <index name="ix_result_provision_type_result_provision_type_name_unique" unique="true">
+            <column ascending="true" name="result_provision_type_name"/>
+         </index>
+      </table>
+      <table name="result_type" remarks="Data type of end result, e.g. String, Float, URL, File." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('result_type_result_type_id_seq'::regclass)" digits="0" id="0" name="result_type_id" nullable="false" remarks="" size="10" type="serial">
+            <child column="result_type_id" foreignKey="analysis_capability_result_type_id_fkey" implied="false" onDeleteCascade="false" table="analysis_capability"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="result_type_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <primaryKey column="result_type_id" sequenceNumberInPK="1"/>
+         <index name="result_type_pkey" unique="true">
+            <column ascending="true" name="result_type_id"/>
+         </index>
+         <index name="ix_result_type_result_type_name_unique" unique="true">
+            <column ascending="true" name="result_type_name"/>
+         </index>
+      </table>
+      <table name="view_geosample_and_mineral_count" remarks="" schema="public" type="VIEW">
+         <column autoUpdated="false" digits="0" id="0" name="location" nullable="true" remarks="" size="2147483647" type="geometry"/>
+         <column autoUpdated="false" digits="0" id="1" name="igsn" nullable="true" remarks="" size="9" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="igsn_url" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="name" nullable="true" remarks="" size="32" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="mount_type_name" nullable="true" remarks="" size="64" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="sample_custodian" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="sample_custodian_url" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="7" name="collection_url" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="instrument_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="software_version" nullable="true" remarks="" size="16" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="10" name="data_url" nullable="true" remarks="" size="1024" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="11" name="image_url" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="12" name="image_thumbnail_url" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="13" name="analysis_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="14" name="analysed_by" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="15" name="analysed_by_url" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="16" name="mineral_information_json" nullable="true" remarks="" size="2147483647" type="text"/>
+      </table>
+   </tables>
+</database>

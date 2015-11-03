@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:include="page :: head(title=${title})"></head>
+	<body>
+		<div th:include="page :: header"></div>
+		
+		<h1>Analysis Requests</h1>
+		
+		<a th:href="@{/AnalysisRequest/Create}">Create</a>
+		<table th:unless="${#lists.isEmpty(analysisRequests)}">
+			<thead>
+				<tr>
+					<th>AR#</th>
+					<th>Analysis Type</th>
+					<th>Instrument</th>
+					<th>Requested By</th>
+					<th>Requested On</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="analysisRequest : ${analysisRequests}">
+					<td>
+						<a th:href="@{/AnalysisRequest/} + ${analysisRequest.id}" th:text="${analysisRequest.id}">1</a>
+					</td>
+					<td th:text="${analysisRequest.analysisTypeName}"></td>
+					<td th:text="${analysisRequest.instrumentName}"></td>
+					<td th:text="${analysisRequest.username}"></td>
+					<td th:text="${{analysisRequest.requestDate}}"></td>
+				</tr>
+			</tbody>
+			<tfoot>
+			</tfoot>
+		</table>
+
+		<div th:include="page :: footer"></div>
+	</body>
+</html>

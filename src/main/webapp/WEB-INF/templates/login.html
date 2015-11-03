@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head th:include="page :: head(title=#{login.title})"></head>
+	<body onload='document.f.username.focus();'>
+		<div th:include="page :: header"></div>
+		<div>
+			<h1 th:text="#{login.heading}">Login</h1>
+			<form th:action="@{/login}" method="post">               
+	            <fieldset>
+	                <legend th:text="#{login.please_login}">Please Login</legend>
+	                <div th:if="${param.error}" th:text="#{login.invalid_username_and_password}" class="alert alert-error">    
+	          			Invalid username and password.
+	                </div>
+	                <div th:if="${param.logout}" th:text="#{login.you_have_been_logged_out}" class="alert alert-success"> 
+	                    You have been logged out.
+	                </div>
+	                <label th:text="#{login.username}" for="username">Username</label>
+	                <input type="text" id="username" name="username"/>        
+	                <label th:text="#{login.password}" for="password">Password</label>
+	                <input type="password" id="password" name="password"/>    
+	                <div class="form-actions">
+	                    <button th:text="#{login.log_in}" type="submit">Log in</button>
+	                </div>
+	            </fieldset>
+	        </form>
+		</div>
+		<div th:include="page :: footer"></div>
+	</body>
+</html>
