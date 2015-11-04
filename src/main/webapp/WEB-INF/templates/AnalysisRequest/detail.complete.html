@@ -29,6 +29,7 @@
 					<td th:text="${result.igsn}"></td>
 					<td th:switch="${result.resultTypeName}">
 						<a th:case="'URL'" th:href="${result.value}" th:text="${result.value}">http://ddfe.curtin.edu.au/gswa-library/1/IECUR0003</a>
+						<span th:case="*" th:text="${result.value}"></span> 
 					</td>
 				</tr>
 			</tbody>
