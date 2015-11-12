@@ -25,9 +25,7 @@ INSERT INTO faction_person_mm (faction_id, person_id) VALUES
 INSERT INTO person_authority_mm (person_id, authority_id) VALUES
     ((SELECT person_id FROM person WHERE username = 'user'), (SELECT authority_id FROM authority WHERE authority_name = 'ROLE_USER')),
     ((SELECT person_id FROM person WHERE username = 'admin'), (SELECT authority_id FROM authority WHERE authority_name = 'ROLE_USER')),
-    ((SELECT person_id FROM person WHERE username = 'admin'), (SELECT authority_id FROM authority WHERE authority_name = 'ROLE_ADMIN')),
-    ((SELECT person_id FROM person WHERE username = '254457k'), (SELECT authority_id FROM authority WHERE authority_name = 'ROLE_USER')),
-    ((SELECT person_id FROM person WHERE username = '254457k'), (SELECT authority_id FROM authority WHERE authority_name = 'ROLE_ADMIN'));
+    ((SELECT person_id FROM person WHERE username = 'admin'), (SELECT authority_id FROM authority WHERE authority_name = 'ROLE_ADMIN'));
 
 INSERT INTO manufacturer (manufacturer_name) VALUES
 	('TESCAN');
