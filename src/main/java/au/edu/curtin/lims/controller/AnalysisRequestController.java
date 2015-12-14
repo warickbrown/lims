@@ -447,9 +447,11 @@ public class AnalysisRequestController extends BaseController {
                 sb.append(",International Geo Sample Number registry");
                 sb.append(",Atom probe tomography");
                 
-                // TODO:: UPDATE LOCATION URL -- it will look like this: https://data.pawsey.org.au/public/?path=/GSWA_Geophysics
-                sb.append(String.format(",http://ddfe.curtin.edu.au/gswa-library/%d/%s", analysisRequest.getAnalysisRequestId(), igsn));
-                sb.append(",\"1 Zip File.\"");
+                sb.append(String.format(",https://data.pawsey.org.au/public/?path=/Atom%20Probe%20Tomography/%d/%s", 
+                        analysisRequest.getAnalysisRequestId(), 
+                        igsn));
+                
+                sb.append(",\"1 RHIT File.\"");
                 sb.append("," + humanReadableByteCount(projectFileSize, false));
                 
                 sb.append(new SimpleDateFormat(",yyyy-MM-dd").format(Calendar.getInstance().getTime()));
